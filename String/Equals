@@ -36,7 +36,7 @@ public boolean equals(Object anObject) {
 
 ### **2. 使用示例**
 
-public class Main {
+public class ClassTest {
     public static void main(String[] args) {
         String s1 = "hello";
         String s2 = "hello";

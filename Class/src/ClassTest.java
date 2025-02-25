@@ -1,7 +1,9 @@
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ClassTest {
 
@@ -68,6 +70,37 @@ public class ClassTest {
         s1.printInfo("Tom");
     }
 
+    @Test
+    public void test_05() throws NoSuchFieldException, IllegalAccessException {
+        student t1 = new student("Tom", 23);
+        Class<?> clazz = t1.getClass();
+        Field[] ds = clazz.getDeclaredFields();
+        for (Field f : ds){
+            System.out.println("字段名" + f.getName());
+        }
+        Field field = clazz.getDeclaredField("secret");
+        field.setAccessible(true);
+        field.set(t1,"I 'm a fool");
+        System.out.println("The value after change : " + field.get(t1));
+
+
+    }
+    @Test
+    public void test_06() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        student s1 = new student("steve", 111);
+
+        Class<?> c = s1.getClass();
+
+        Method[] methods = c.getMethods();
+        for (Method m : methods){
+            System.out.println("Class" + c + "'s method : " + m.getName());
+        }
+
+        Method m1 = c.getMethod("printInfo", String.class);
+        m1.invoke(s1,"233333");
+    }
+
+
 }
 
 
@@ -124,43 +157,11 @@ class student {
     public  void setSecret(String secret){
         this.secret = secret;
     }
+
 }
 
-//
-//import java.lang.reflect.Field;
-//
-//class Person {
-//    private String name;
-//    private int age;
-//
-//    public Person(String name, int age) {
-//        this.name = name;
-//        this.age = age;
-//    }
-//}
-//
-//public class ReflectionExample {
-//    public static void main(String[] args) throws Exception {
-//        Person person = new Person("Alice", 25);
-//
-//        // 获取 Class 对象
-//        Class<?> clazz = person.getClass();
-//
-//        // 获取所有字段
-//        Field[] fields = clazz.getDeclaredFields();
-//        for (Field field : fields) {
-//            System.out.println("字段名: " + field.getName());
-//        }
-//
-//        // 获取指定字段并修改值
-//        Field nameField = clazz.getDeclaredField("name");
-//        nameField.setAccessible(true); // 绕过权限检查
-//        nameField.set(person, "Bob");
-//
-//        // 获取字段的值
-//        System.out.println("修改后的 name: " + nameField.get(person));
-//    }
-//}
+
+
 //import java.lang.reflect.Method;
 //
 //class Person {

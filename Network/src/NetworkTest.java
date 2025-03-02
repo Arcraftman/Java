@@ -6,6 +6,26 @@ import java.net.*;
 public class NetworkTest {
 
     @Test
+    public void test01() throws UnknownHostException{
+        InetAddress localHost = InetAddress.getLocalHost();
+        System.out.println(localHost);
+    }
+
+    @Test
+    public void test02()throws UnknownHostException{
+        InetAddress atguigu = InetAddress.getByName("www.atguigu.com");
+        System.out.println(atguigu);
+    }
+
+    @Test
+    public void test03()throws UnknownHostException{
+//		byte[] addr = {112,54,108,98};
+        byte[] addr = {(byte)192,(byte)168,24,56};
+        InetAddress atguigu = InetAddress.getByAddress(addr);
+        System.out.println(atguigu);
+    }
+
+    @Test
     public void test_01(){
         try (Socket socket = new Socket("localhost", 8080)) {
             OutputStream output = socket.getOutputStream();
@@ -80,6 +100,43 @@ public class NetworkTest {
             System.out.println("Server says: " + response);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test_05() throws UnknownHostException{
+        InetAddress baidu = InetAddress.getByName("www.baidu.com");
+        InetAddress google = InetAddress.getByName("www.google.com");
+        System.out.println(baidu);
+        System.out.println(google);
+    }
+
+    public static void main(String[] args) throws IOException {
+        try (ServerSocket serverSocket = new ServerSocket(8080)) {
+            System.out.println("Waiting for connect ...");
+
+            Socket socket = serverSocket.accept();
+            InetAddress inetAddress = socket.getInetAddress();
+            System.out.println(inetAddress.getHostAddress() + "客户端连接成功！！");
+            InputStream input = socket.getInputStream();
+
+            byte[] data = new byte[1024];
+            StringBuilder s = new StringBuilder();
+            int len;
+            while ((len = input.read(data)) != -1) {
+                s.append(new String(data, 0, len));
+            }
+            System.out.println(inetAddress.getHostAddress() + "客户端发送的消息是：" + s);
+
+            //4、获取输出流，用来发送数据给该客户端
+            OutputStream out = socket.getOutputStream();
+            //发送数据
+            out.write("欢迎登录".getBytes());
+            out.flush();
+            socket.close();
+
+
+
         }
     }
 }
